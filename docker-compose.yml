@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: task_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - elasticsearch
+
+  rabbitmq:
+    image: rabbitmq:3.8
+    ports:
+      - "5672:5672"
+
+  celery:
+    build: .
+    command: celery -A config worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - web
+      - rabbitmq
+
+  flower:
+    image: mher/flower
+    command: celery -A config flower
+    ports:
+      - "5555:5555"
+    depends_on:
+      - rabbitmq
+
+  elasticsearch:
+    image: elasticsearch:7.9.3
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"      
