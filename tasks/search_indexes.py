@@ -1,7 +1,7 @@
 from elasticsearch_dsl import Document, Text, Date
 from elasticsearch_dsl.connections import connections
 
-connections.create_connection(hosts=['elasticsearch'])
+connections.create_connection(hosts=['http://localhost:9200'])
 
 class TaskIndex(Document):
     title = Text()
