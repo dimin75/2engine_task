@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   db:
     image: postgres:13
     environment:
@@ -9,7 +10,7 @@ services:
       POSTGRES_PASSWORD: postgres
     networks:
       - my-network
-
+  
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -23,7 +24,7 @@ services:
       - elasticsearch
     networks:
       - my-network
-
+      
   rabbitmq:
     image: rabbitmq:3.8
     ports:
@@ -35,13 +36,13 @@ services:
     build: .
     command: celery -A config worker -l info
     volumes:
-      - .:/code
+      - .:/code 
     depends_on:
       - web
       - rabbitmq
     networks:
       - my-network
-
+    
   flower:
     image: mher/flower
     command: celery -A config flower
@@ -51,7 +52,7 @@ services:
       - rabbitmq
     networks:
       - my-network
-
+        
   elasticsearch:
     image: elasticsearch:7.9.3
     environment:
@@ -64,4 +65,3 @@ services:
 networks:
   my-network:
     driver: bridge
-
