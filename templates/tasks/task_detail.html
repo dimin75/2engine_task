@@ -9,5 +9,6 @@
     <p>Status: {{ task.status }}</p>
     <a href="{% url 'task_edit' pk=task.pk %}">Edit</a>
     <a href="{% url 'task_list' %}">Back to list</a>
+    <a href="{% url 'api-root' %}">Go to API</a>
 </body>
 </html>

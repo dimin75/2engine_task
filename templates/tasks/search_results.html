@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    
+    {% if results %}
+        <ul>
+            {% for result in results %}
+                <li>
+                    <a href="{% url 'task_detail' pk=result.meta.id %}">{{ result.title }}</a><br>
+                    <small>{{ result.description }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found for your query.</p>
+    {% endif %}
+    
+    <a href="{% url 'task_list' %}">Back to Task List</a>
+    <a href="{% url 'api-root' %}">Go to API</a>
+</body>
+</html>
