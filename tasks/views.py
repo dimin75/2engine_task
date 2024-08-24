@@ -15,6 +15,10 @@ from django.db.models import Q
 from django_elasticsearch_dsl.search import Search
 from django.shortcuts import render
 from .documents import TaskDocument
+
+from django.http import JsonResponse
+from elasticsearch_dsl import Search
+from rest_framework.decorators import api_view
 # from .models import Task
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -74,11 +78,27 @@ def task_edit(request, pk):
     return render(request, 'tasks/task_edit.html', {'form': form})
 # search notes
 
+@api_view(['GET'])
 def search_tasks(request):
     query = request.GET.get('q')
+
+    if not query:
+        if request.headers.get('Content-Type') == 'application/json':
+            return JsonResponse([], safe=False)
+        else:
+            return render(request, 'tasks/search_results.html', {'results': []})
+    
     search = Search(index='tasks').query("multi_match", query=query, fields=['title', 'description'])
     results = search.execute()
-    return render(request, 'tasks/search_results.html', {'results': results})
 
+    formatted_results = [{
+        "id": hit.meta.id,
+        "title": hit.title,
+        "description": hit.description,
+        "status": getattr(hit, 'status', 'unknown'),  # �������� ������� �������� status
+    } for hit in results]
 
-
+    if request.headers.get('Content-Type') == 'application/json':
+        return JsonResponse(formatted_results, safe=False)
+    else:
+        return render(request, 'tasks/search_results.html', {'results': formatted_results})

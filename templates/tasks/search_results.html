@@ -9,10 +9,8 @@
     {% if results %}
         <ul>
             {% for result in results %}
-                <li>
-                    <a href="{% url 'task_detail' pk=result.meta.id %}">{{ result.title }}</a><br>
-                    <small>{{ result.description }}</small>
-                </li>
+                <a href="{% url 'task_detail' pk=result.id %}">{{ result.title }}</a>
+                  <p>{{ result.description }}</p>
             {% endfor %}
         </ul>
     {% else %}

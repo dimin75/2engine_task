@@ -1,20 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task List</title>
 </head>
 <body>
-    <h1>Tasks</h1>
-    <ul>
-        {% for task in tasks %}
-        <li>
-            <a href="{% url 'task_detail' pk=task.pk %}">{{ task.title }}</a>
-            - {{ task.status }}
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'task_create' %}">Create new task</a>
-    <br>
-    <a href="{% url 'api-root' %}">Go to API</a>
+    <h1>Task List</h1>
+
+    <!-- Task search form -->
+    <form action="{% url 'search_tasks' %}" method="get">
+        <input type="text" name="q" placeholder="Search for tasks...">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Task list table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.created_at }}</td>
+                    <td>
+                        <a href="{% url 'task_detail' pk=task.id %}">View</a>
+                        <a href="{% url 'task_edit' pk=task.id %}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Reference to API search -->
+    <p>
+        <a href="{% url 'search_tasks' %}?q=1task">Search for '1task'</a>
+    </p>
 </body>
 </html>
