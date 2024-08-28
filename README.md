@@ -27,11 +27,11 @@
 
    ```bash
    curl -X POST http://localhost:8000/api/tasks/ -H "Content-Type: application/json" -d '{"title": "Test_Task_Curl1", "description": "Task from Curl 1", "status": "queued"}
-5.  Создание задачи через api с помощью curl:
+5. Создание задачи через api с помощью curl:
 
    ```bash
    curl -X PUT http://localhost:8000/api/tasks/{1}/ -H "Content-Type: application/json" -d '{"title": "Updated Task", "description": "Updated"}'
-6.  Удаление задачи через api с помощью curl:
+6. Удаление задачи через api с помощью curl:
 
    ```bash
    сurl -X DELETE http://localhost:8000/api/tasks/{1}/
